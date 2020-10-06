@@ -1,6 +1,7 @@
 import calcScroll from "./calc-scroll";
 export default function modals() {
-	function bindModal(openModalSelector, modalSelector, closeModalSelector, closeModalOnOverlay = true) {
+	let triggerClicked = false;
+	function bindModal(openModalSelector, modalSelector, closeModalSelector, destroyTrigger = false) {
 		const openModal = document.querySelectorAll(openModalSelector);
 		const modal = document.querySelector(modalSelector);
 		const closeModal = document.querySelector(closeModalSelector);
@@ -9,6 +10,7 @@ export default function modals() {
 		function closeAllModals() {
 			document.querySelectorAll('[data-modal]').forEach(item => {
 				item.style.display = 'none';
+				item.classList.add('animated', 'fadeIn');
 			});
 		}
 
@@ -17,6 +19,9 @@ export default function modals() {
 				closeAllModals();
 				if (e.target) {
 					e.preventDefault();
+				}
+				if(destroyTrigger){
+					document.querySelector(openModalSelector).remove();
 				}
 				modal.style.display = 'block';
 				document.body.style.overflow = 'hidden';
@@ -32,7 +37,7 @@ export default function modals() {
 		});
 
 		modal.addEventListener('click', (e) => {
-			if (e.target === modal && closeModalOnOverlay) {
+			if (e.target === modal) {
 				closeAllModals();
 				modal.style.display = 'none';
 				document.body.style.overflow = '';
@@ -41,8 +46,19 @@ export default function modals() {
 		});
 	}
 
-	function openModalByTime(selector, time) {
+	function openModalByScroll(selector){
+		window.addEventListener('scroll', () => {
+			const documentScrollTop = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
 
+			if(!triggerClicked && ((window.pageYOffset + document.documentElement.clientHeight) >= documentScrollTop)){
+				if(document.querySelector(selector)){
+					document.querySelector(selector).click();
+				}
+			}
+		})
+	}
+
+	function openModalByTime(selector, time) {
 		const modalTimeOut = setTimeout(() => {
 			let display;
 
@@ -55,6 +71,7 @@ export default function modals() {
 			if(!display){
 				document.querySelector(selector).style.display = 'block';
 				document.body.style.overflow = 'hidden';
+				document.body.style.marginRight = `${calcScroll()}px`;
 				clearTimeout(modalTimeOut);
 			}
 		}, time);
@@ -62,5 +79,7 @@ export default function modals() {
 
 	bindModal('.button-design', '.popup-design', '.popup-design .popup-close');
 	bindModal('.button-consultation', '.popup-consultation', '.popup-consultation .popup-close');
-	openModalByTime('.popup-consultation', 3000);
+	bindModal('.fixed-gift', '.popup-gift', '.popup-gift .popup-close', true);
+	openModalByScroll('.fixed-gift');
+	// openModalByTime('.popup-consultation', 3000);
 };
