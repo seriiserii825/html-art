@@ -4,6 +4,8 @@ const gulp = require("gulp");
 const webpack = require("webpack-stream");
 const browsersync = require("browser-sync");
 
+let siteUrl = 'http://html-art.host1670806.hostland.pro/';
+
 const dist = "./dist/";
 
 gulp.task("copy-html", () => {
@@ -51,12 +53,20 @@ gulp.task("copy-assets", () => {
 });
 
 gulp.task("watch", () => {
+    // browsersync.init({
+	// 	server: "./dist/",
+	// 	port: 4000,
+	// 	notify: true
+    // });
+
     browsersync.init({
-		server: "./dist/",
-		port: 4000,
-		notify: true
+        proxy: {
+            target: siteUrl,
+            ws: true
+        },
+        reloadDelay: 1000
     });
-    
+
     gulp.watch("./src/index.html", gulp.parallel("copy-html"));
     gulp.watch("./src/assets/**/*.*", gulp.parallel("copy-assets"));
     gulp.watch("./src/js/**/*.js", gulp.parallel("build-js"));
