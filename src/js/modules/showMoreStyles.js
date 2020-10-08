@@ -1,15 +1,23 @@
-export default function showMoreStyles(trigger, stylesSelector) {
-	const btn = document.querySelector(trigger);
-	const styles = document.querySelectorAll(stylesSelector);
-	styles.forEach(item => {
-		item.classList.add('animated', 'fadeInUp');
-	});
+import {getResource} from "../services/resources";
 
-	btn.addEventListener('click', () => {
-		styles.forEach(item => {
-			item.classList.remove('hidden-lg', 'hidden-md', 'hidden-sm', 'hidden-xs');
-			item.classList.add('col-sm-3', 'col-sm-offset-0', 'col-xs-10', 'col-xs-offset-1');
+export default function showMoreStyles(trigger, wrapper) {
+	const btn = document.querySelector(trigger);
+	getResource('../assets/db.json').then((res) => showCard(res.styles));
+
+	function showCard(data) {
+		btn.addEventListener('click', () => {
+			data.forEach(item => {
+				const div = document.createElement('div');
+				div.classList.add('animated', 'fadeInUp', 'col-sm-3', 'col-sm-offset-0', 'col-xs-10', 'col-xs-offset-1');
+				div.innerHTML = `
+                <div class=styles-block>
+                    <img src="${item.src}" alt>
+                    <h4>${item.title}</h4>
+                    <a href="#">${item.link}</a>
+                </div>
+			`;
+				document.querySelector(wrapper).appendChild(div);
+			});
 		});
-		btn.remove();
-	});
+	}
 };

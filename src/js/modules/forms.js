@@ -1,4 +1,5 @@
 // import checkInputNumber from "./check-input-number";
+import {postData} from "../services/resources";
 
 export default function postForms() {
 	const forms = document.querySelectorAll('form');
@@ -30,14 +31,6 @@ export default function postForms() {
 		designer: 'assets/server.php',
 		question: 'assets/question.php',
 	};
-
-	const postData = async (url, data) => {
-		const res = await fetch(url, {
-			method: "POST",
-			body: data
-		});
-		return await res.text();
-	}
 
 	function clearData() {
 		inputs.forEach(item => {

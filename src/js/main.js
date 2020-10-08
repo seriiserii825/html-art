@@ -10,5 +10,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	forms();
 
-	showMoreStyles('.button-styles', '.styles-2')
+	showMoreStyles('.button-styles', '#styles .row');
 });
