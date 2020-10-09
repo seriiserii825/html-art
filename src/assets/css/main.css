@@ -906,6 +906,7 @@ h4 {
   margin-top: 1rem;
   background-color: #f7e7e6;
   padding: 3rem 4rem;
+  transition: height 1s ease-in-out;
 }
 .often-questions .accordion-block:before {
   content: '';
@@ -1724,4 +1725,17 @@ h4 {
     padding: 3rem 3rem;
     width: 25rem;
   }
+}
+.pageup {
+  opacity: 0;
+  width: 26px;
+  height: 26px;
+  position: fixed;
+  bottom: 100px;
+  right: 5%;
+  z-index: 30;
+  background-color: #fff;
+  cursor: pointer;
+  border: 1px solid white;
+  transition: 1s all;
 }
